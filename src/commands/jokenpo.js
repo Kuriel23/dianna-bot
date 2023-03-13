@@ -1,60 +1,48 @@
 const discord = require("discord.js");
+const { RockPaperScissors } = require("discord-gamecord");
 
 module.exports = {
   data: new discord.SlashCommandBuilder()
     .setName("jokenpo")
     .setDescription("Jogue á Pedra, Papel, Tesoura comigo!")
-    .addStringOption((option) =>
+    .addUserOption((option) =>
       option
-        .setName("escolha")
-        .setNameLocalizations({ "pt-BR": "escolha", "en-US": "choice" })
-        .setDescription("Escolha 1 dos itens.")
-        .setChoices(
-          { name: "pedra", value: "pedra" },
-          { name: "papel", value: "papel" },
-          { name: "tesoura", value: "tesoura" }
-        )
+        .setName("usuário")
+        .setNameLocalizations({ "pt-BR": "usuário", "en-US": "user" })
+        .setDescription("Identifique o utilizador")
         .setRequired(true)
     ),
   async execute(interaction, client) {
-    const playerChoice = interaction.options.getString("escolha");
-    const bruh = ["papel", "pedra", "tesoura"];
-    const computerChoice = bruh[Math.floor(Math.random() * bruh.length)];
+    const Game = new RockPaperScissors({
+      message: interaction,
+      isSlashGame: true,
+      opponent: interaction.options.getUser("usuário"),
+      embed: {
+        title: "Jokenpo",
+        color: client.cor,
+        description: "Pressione um botão abaixo para escolher.",
+      },
+      buttons: {
+        rock: "Pedra",
+        paper: "Papel",
+        scissors: "Tesoura",
+      },
+      emojis: {
+        rock: "🌑",
+        paper: "📰",
+        scissors: "✂️",
+      },
+      mentionUser: true,
+      timeoutTime: 60000,
+      buttonStyle: "PRIMARY",
+      pickMessage: "Você escolheu {emoji}.",
+      winMessage: "**{player}** ganhou o jogo! Parabéns!",
+      tieMessage: "O jogo empatou! Ninguém ganhou o jokenpo!",
+      timeoutMessage: "O jogo não foi finalizado! Ninguém ganhou o jokenpo!",
+      playerOnlyMessage:
+        "Apenas {player} e {opponent} podem usar esses botões.",
+    });
 
-    if (playerChoice === computerChoice) {
-      return interaction.reply({
-        content: `${playerChoice
-          .replace("tesoura", "✂")
-          .replace("papel", "📰")
-          .replace("pedra", "🪨")} + ${computerChoice
-          .replace("tesoura", "✂")
-          .replace("papel", "📰")
-          .replace("pedra", "🪨")} = **EMPATE**`,
-      });
-    } else if (
-      (playerChoice === "pedra" && computerChoice === "tesoura") ||
-      (playerChoice === "papel" && computerChoice === "pedra") ||
-      (playerChoice === "tesoura" && computerChoice === "papel")
-    ) {
-      return interaction.reply({
-        content: `${playerChoice
-          .replace("tesoura", "✂")
-          .replace("papel", "📰")
-          .replace("pedra", "🪨")} + ${computerChoice
-          .replace("tesoura", "✂")
-          .replace("papel", "📰")
-          .replace("pedra", "🪨")} = **JOGADOR VENCEU**`,
-      });
-    } else {
-      return interaction.reply({
-        content: `${playerChoice
-          .replace("tesoura", "✂")
-          .replace("papel", "📰")
-          .replace("pedra", "🪨")} + ${computerChoice
-          .replace("tesoura", "✂")
-          .replace("papel", "📰")
-          .replace("pedra", "🪨")} = **DIANNA VENCEU**`,
-      });
-    }
+    Game.startGame();
   },
 };
