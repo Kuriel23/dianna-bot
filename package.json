@@ -16,7 +16,7 @@
     "fs": "^0.0.1-security",
     "mathjs": "^11.5.0",
     "moment": "^2.29.4",
-    "mongoose": "^6.8.1",
+    "mongoose": "^7.0.0",
     "ms-pt-br": "^2.1.4",
     "parse-ms-2": "^1.0.0",
     "superagent": "^8.0.3",
