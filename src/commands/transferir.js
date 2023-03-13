@@ -32,14 +32,8 @@ module.exports = {
         content: "Não foi encontrado esse usuário...",
         ephemeral: true,
       });
-    client.db.Users.findOne(
-      { _id: interaction.member.id },
-      function (err, doc) {
-        if (err)
-          return interaction.reply({
-            content: "Erro encontrado no banco de dados",
-            ephemeral: true,
-          });
+    const doc = await client.db.Users.findOne(
+      { _id: interaction.member.id })
         if (doc) {
           if (doc.coins < dinheiro2) {
             return interaction.reply({
@@ -68,30 +62,20 @@ module.exports = {
               embeds: [client.msg.embeds.registro],
             });
           }
-          client.db.Users.findOne({ _id: transferido.id }, function (err, doc) {
-            if (err)
-              return interaction.reply({
-                content:
-                  "Erro encontrado no banco de dados do usuário ao qual foi transferido.",
-                ephemeral: true,
-              });
-            if (doc) {
-              doc.coins += dinheiro2;
-              doc.save();
+          const doc2 = await client.db.Users.findOne({ _id: transferido.id })
+            if (doc2) {
+              doc2.coins += dinheiro2;
+              doc2.save();
             }
-            if (!doc) {
+            if (!doc2) {
               const docToSave = new client.db.Users({
                 _id: transferido.id,
                 coins: dinheiro2,
-              });
-              docToSave.save();
+              }).save();
               return interaction.reply({
                 embeds: [client.embeds.registro],
               });
             }
-          });
         }
-      }
-    );
   },
 };

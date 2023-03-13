@@ -10,7 +10,7 @@ module.exports = async (client, message) => {
     if (message.author.id !== "354233941550694400") return;
     if (message.content.startsWith(`<@${client.user.id}>`)) {
       const embed = new discord.EmbedBuilder()
-        .setTitle("For You Control - A fast and efficient control")
+        .setTitle("Dianna Control - A fast and efficient control")
         .setDescription(
           "Controle a adesão de novos servidores, comandos de desenvolvimento tudo num menu de controlo rápido e eficiente!"
         )

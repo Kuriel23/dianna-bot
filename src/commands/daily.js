@@ -7,14 +7,8 @@ module.exports = {
     .setNameLocalizations({ "pt-BR": "diário", "en-US": "daily" })
     .setDescription("Resgate um dinheiro a cada 24h."),
   async execute(interaction, client) {
-    client.db.Users.findOne(
-      { _id: interaction.member.id },
-      function (err, doc) {
-        if (err)
-          return interaction.reply({
-            content: "Erro no banco de dados encontrado.",
-            ephemeral: true,
-          });
+    const doc = await client.db.Users.findOne(
+      { _id: interaction.member.id })
         const valueRandom = Math.floor(
           Math.random() * (10000 - 1000 + 1) + 1000
         );
@@ -44,6 +38,4 @@ module.exports = {
           content: `Você resgatou ${valueRandom} coins no daily.`,
         });
       }
-    );
-  },
 };
