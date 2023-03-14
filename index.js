@@ -1,4 +1,5 @@
 const discord = require("discord.js");
+const { GiveawaysManager } = require("discord-giveaways");
 require("dotenv").config();
 
 const client = new discord.Client({
@@ -13,6 +14,17 @@ const client = new discord.Client({
     },
   },
 });
+
+const manager = new GiveawaysManager(client, {
+  storage: "./giveaways.json",
+  default: {
+    botsCanWin: false,
+    embedColor: client.cor,
+    embedColorEnd: client.cor,
+    reaction: "🎉",
+  },
+});
+client.giveawaysManager = manager;
 
 const cores = ["#daa520", "#c0c0c0", "#008000", "#0000ff"];
 const cor = cores[Math.floor(Math.random() * cores.length)];
