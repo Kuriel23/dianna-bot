@@ -52,7 +52,7 @@ module.exports = {
       duration: ms(giveawayDuration),
       prize: giveawayPrize,
       winnerCount: giveawayWinnerCount,
-      hostedBy: client.config.hostedBy ? interaction.user : null,
+      hostedBy: interaction.user,
       messages,
     });
 
